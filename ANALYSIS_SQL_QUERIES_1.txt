@@ -1,0 +1,25 @@
+WITH combined_data AS (
+  SELECT striker, 
+  runs_of_bat AS batsman_runs,
+  `over`,
+  2025 AS season_year
+  FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.ipl_2025_raw`
+  UNION ALL
+  SELECT striker,
+  runs_of_bat AS batsman_runs,
+  `over`,
+  2026 AS season_year 
+  FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul`)
+  
+    SELECT 
+    season_year,
+    striker,
+    SUM(batsman_runs) AS total_runs,
+    COUNT(`over`) AS total_balls_faced,
+    ROUND((SUM(batsman_runs)/
+    NULLIF(COUNT(`over`),0))*100,2) AS
+    strike_rate
+    FROM combined_data
+    WHERE striker = 'Rahul'
+    GROUP BY season_year, striker
+    ORDER BY season_year DESC;

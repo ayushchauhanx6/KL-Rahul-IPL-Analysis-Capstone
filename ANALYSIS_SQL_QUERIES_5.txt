@@ -1,0 +1,30 @@
+WITH team_scores AS (
+  SELECT
+   match_id,
+   batting_team,
+   SUM(runs_of_bat + extras) AS total_score
+ FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul`
+GROUP BY match_id,batting_team),
+winners AS (
+  SELECT
+  t1.match_id,
+  CASE WHEN t1.total_score > t2.total_score THEN t1.batting_team
+  WHEN t2.total_score > t1.total_score THEN t2.batting_team
+  ELSE 'Tie'
+  END AS winning_team
+  FROM team_scores t1
+  JOIN team_scores t2 ON t1.match_id = t2.match_id AND t1.batting_team < t2.batting_team
+) 
+  SELECT
+  CASE WHEN w.winning_team = 'DC' THEN 'Won' ELSE 'Lost' END AS match_result,
+  SUM(t.runs_of_bat) AS total_runs,
+  COUNT(CASE WHEN t.wide = 0 OR T.wide IS NULL THEN 1 END) AS balls_faced,
+  ROUND(SAFE_DIVIDE(SUM(t.runs_of_bat),
+  COUNT(CASE WHEN t.wide = 0 OR t.wide IS NULL THEN 1 END))*100,2) AS strike_rate
+    FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul` AS  t
+  JOIN
+    winners AS w ON t.match_id = w.match_id
+    WHERE
+    t.striker = 'Rahul'
+    GROUP BY 
+    match_result

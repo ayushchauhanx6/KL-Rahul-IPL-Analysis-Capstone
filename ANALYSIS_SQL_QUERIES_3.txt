@@ -1,0 +1,16 @@
+WITH striker_stats AS (
+  SELECT
+   SUM(CASE WHEN CAST( `over` AS INT64) BETWEEN 1 AND 6 THEN runs_of_bat ELSE 0 END)
+   AS powerplay_runs,
+    SUM(runs_of_bat) AS total_runs
+    FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul`
+    WHERE
+    striker = 'Rahul'
+    AND season =  2026
+)
+    SELECT
+     powerplay_runs,
+     total_runs,
+     ROUND(SAFE_DIVIDE(powerplay_runs,total_runs)*100,2) AS powerplay_run_percentage
+     FROM
+     striker_stats

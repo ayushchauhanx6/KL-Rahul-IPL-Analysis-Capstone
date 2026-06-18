@@ -1,0 +1,15 @@
+SELECT
+  CASE
+    WHEN  venue LIKE '%Arun Jaitley Stadium%' THEN 'Home (Arun Jaitley Stadium)'
+    ELSE 'Away Matches'
+   END AS venue_category,
+   COUNT(*) AS total_balls_faced,
+   SUM(CASE WHEN runs_of_bat
+  in (4,6)THEN 1 ELSE 0 END) AS total_boundaries,
+  ROUND(
+      (SUM(CASE WHEN runs_of_bat IN (4,6)
+      THEN 1 ELSE 0 END)*100.0)/
+     NULLIF(COUNT(*),0),
+          2
+  )   AS boundary_efficiency_pct
+  FROM `smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul`

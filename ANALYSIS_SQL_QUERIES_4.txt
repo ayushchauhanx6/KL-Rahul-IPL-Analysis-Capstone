@@ -1,0 +1,12 @@
+SELECT
+ bowling_team,
+ SUM(runs_of_bat) AS total_runs,
+ COUNT(CASE WHEN wide IS NULL OR wide = 0 THEN 1 END) AS balls_faced,
+ ROUND(SAFE_DIVIDE(SUM(runs_of_bat), COUNT(CASE WHEN wide IS NULL OR wide =0 THEN 1 END))*100,2) AS strike_rate
+ FROM`smooth-research-491306-f7.ipl_kaggle_coursera_project.kl rahul`
+ WHERE striker = 'Rahul'
+ AND season = 2026
+ GROUP BY BOWLING_team
+ ORDER BY
+ strike_rate DESC
+ LIMIT 1;
